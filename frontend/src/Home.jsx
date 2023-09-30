@@ -1,0 +1,80 @@
+import React, { useEffect, useState } from 'react';
+
+function Home() {
+  const [adminCount, setAdminCount] = useState();
+  const [employeeCount, setEmployeeCount] = useState();
+
+  useEffect(() => {
+    // Simulate fetching admin and employee counts
+    const adminCount = 10; // Replace with actual admin count
+    const employeeCount = 100; // Replace with actual employee count
+
+    setAdminCount(adminCount);
+    setEmployeeCount(employeeCount);
+  }, []);
+
+  return (
+    <div>
+      <div className='p-3 d-flex justify-content-around mt-3'>
+        <div className='px-3 pt-2 pb-3 border shadow-sm w-25'>
+          <div className='text-center pb-1'>
+            <h4>Admin Count</h4>
+          </div>
+          <hr />
+          <div className=''>
+            <h5>Total: {adminCount}</h5>
+          </div>
+        </div>
+        <div className='px-3 pt-2 pb-3 border shadow-sm w-25'>
+          <div className='text-center pb-1'>
+            <h4>Team Member Count</h4>
+          </div>
+          <hr />
+          <div className=''>
+            <h5>Total: {employeeCount}</h5>
+          </div>
+        </div>
+      </div>
+
+      {/* Display static and meaningful data */}
+      <div className='mt-4 px-5 pt-3'>
+        <h3>Latest Updates</h3>
+        <div className='border p-3 shadow-sm'>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel purus non nisl faucibus vehicula.
+            Vivamus euismod quam id aliquet. 
+          </p>
+          <p>
+            Suspendisse potenti. In feugiat, dui non interdum mattis, arcu felis efficitur ex, vel tristique elit
+            erat a justo. Sed eu varius dui. Nulla facilisi.
+          </p>
+          <p>
+            Phasellus vel mi et erat congue laoreet. Nullam nec ex id neque mattis elementum. Proin auctor, nisl
+            non tempus ultricies, justo ex fermentum est, vel dignissim metus urna vel odio. Aliquam erat volutpat.
+          </p>
+        </div>
+      </div>
+
+      {/* Rules and Regulations */}
+      <div className='mt-4 px-5 pt-3'>
+        <h3>Rules and Regulations</h3>
+        <div className='border p-3 shadow-sm'>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vel purus non nisl faucibus vehicula.
+            Vivamus euismod quam id aliquet. Duis in ex eu arcu malesuada lacinia. 
+          </p>
+          <p>
+            Suspendisse potenti. In feugiat, dui non interdum mattis, arcu felis efficitur ex, vel tristique elit
+            erat a justo. Sed eu varius dui. Nulla facilisi. Nam vitae tortor eget nisi cursus varius. Nam
+            scelerisque enim nec justo cursus, a efficitur quam tristique. Proin vel turpis nisl.
+          </p>
+          <p>
+            Phasellus vel mi et erat congue laoreet. Nullam nec ex id neque mattis elementum. 
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Home;

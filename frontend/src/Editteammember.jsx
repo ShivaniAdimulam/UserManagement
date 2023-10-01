@@ -14,12 +14,16 @@ function Editteammember() {
   });
   const [roleNames, setRoleNames] = useState([]); // State to store role names
   const navigate = useNavigate();
-
+  const authToken = localStorage.getItem('authToken');
   const { id } = useParams();
 
   useEffect(() => {
     // Fetch role names from the getRoleList API
-    axios.get('http://localhost:4000/admin/getRoleList')
+    axios.get('http://localhost:4000/admin/getRoleList',{
+			headers: {
+			  Authorization: `Bearer ${authToken}`,
+			},
+		  })
       .then((res) => {
         if (res.data.success === true) {
         //   const roles = res.data.data.map((role) => role.roleName);
@@ -37,7 +41,11 @@ function Editteammember() {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/admin/getMemberDetails/${id}`)
+    axios.get(`http://localhost:4000/admin/getMemberDetails/${id}`,{
+			headers: {
+			  Authorization: `Bearer ${authToken}`,
+			},
+		  })
       .then((res) => {
         setData({
           ...data,
@@ -46,7 +54,7 @@ function Editteammember() {
           email: res.data.data.email,
           phoneNumber: res.data.data.phoneNumber,
           password: res.data.data.password,
-          roleId: res.data.data.roleId.roleName,
+          roleId: res.data.data.roleId._id,
           memberid: res.data.data._id,
         });
         console.log(res.data.data._id, data.memberid);
@@ -56,7 +64,11 @@ function Editteammember() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:4000/admin/createOrEditTeamMember', data)
+    axios.post('http://localhost:4000/admin/createOrEditTeamMember', data,{
+			headers: {
+			  Authorization: `Bearer ${authToken}`,
+			},
+		  })
       .then((res) => {
         if (res.data.success === true) {
           navigate('/settings/teammanagement');
@@ -140,7 +152,7 @@ function Editteammember() {
       console.log("selectedRole",selectedRole)
       setData({ ...data, roleId: selectedRole._id });
     }}
-    value={data.role}
+    value={data.roleId}
   >
     <option value="">Select Role</option>
     {roleNames.map((role) => (

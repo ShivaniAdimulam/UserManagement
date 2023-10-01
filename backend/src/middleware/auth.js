@@ -3,14 +3,15 @@ const adminModel = require('../model/adminModel');
 
 module.exports = async (req, res, next) => {
   try {
-    console.log(req.headers.authorization)
+    console.log(req.headers.authorization,"han")
     if (req.headers.authorization) {
       console.log("yess")
       const token = req.headers.authorization.split(" ").pop()
       
-      const { user_id } = jwt.verify(token, "privateKey")
+      const { user_id } = jwt.verify(token, process.env.PRIVATE_KEY)
       req.user = await adminModel.findOneAndUpdate({ _id: user_id, isdeleted: false }, { token }, { new: true })
       if (req.user.verificationStatus !=false) {
+        console.log("Hmm")
         next()
       } else {
         return res.status(403).json({

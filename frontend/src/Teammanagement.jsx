@@ -4,9 +4,13 @@ import { Link } from 'react-router-dom'
 
 function Teammanagement() {
   const [data, setData] = useState([])
-
+  const authToken = localStorage.getItem('authToken');
   useEffect(()=> {
-    axios.get('http://localhost:4000/admin/getSubadminList')
+    axios.get('http://localhost:4000/admin/getSubadminList',{
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
     .then(res => {
       if(res.data.success ==true) {
         console.log(res.data.data)
@@ -24,7 +28,11 @@ function Teammanagement() {
         id: id,
         isdeleted: true,
       };
-    axios.put('http://localhost:4000/admin/deleteTeamMember',requestBody)
+    axios.put('http://localhost:4000/admin/deleteTeamMember',requestBody,{
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
     .then(res => {
       if(res.data.success ==true) {
         window.location.reload(true);

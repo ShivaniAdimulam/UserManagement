@@ -4,9 +4,13 @@ import { Link } from 'react-router-dom'
 
 function Rolemanagement() {
   const [data, setData] = useState([])
-
+  const authToken = localStorage.getItem('authToken');
   useEffect(()=> {
-    axios.get('http://localhost:4000/admin/getRoleList')
+    axios.get('http://localhost:4000/admin/getRoleList',{
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
     .then(res => {
       if(res.data.success ==true) {
         setData(res.data.data);
@@ -17,6 +21,25 @@ function Rolemanagement() {
     .catch(err => console.log(err));
   }, [])
 
+  const handleDelete = (id) => {
+    const requestBody = {
+        roleId: id,
+        isdeleted: true,
+      };
+    axios.put('http://localhost:4000/admin/deleteRole',requestBody,{
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+    .then(res => {
+      if(res.data.success ==true) {
+        window.location.reload(true);
+      } else {
+        alert("Error")
+      }
+    })
+    .catch(err => console.log(err));
+  }
  
 
   return (
@@ -33,7 +56,7 @@ function Rolemanagement() {
               <th>Can add user</th>
               <th>Can edit user</th>
               <th>Can delete user</th>
-             
+              <th>Action</th>
              
             </tr>
           </thead>
@@ -44,7 +67,10 @@ function Rolemanagement() {
                   <td>{role.addUser ? 'Yes' : 'No'}</td>
                 <td>{role.editUser ? 'Yes' : 'No'}</td>
                 <td>{role.deleteUser ? 'Yes' : 'No'}</td>
-
+                <td>
+                    <Link to={`/editrole/`+role._id} className='btn btn-primary btn-sm me-2'>edit</Link>
+                    <button onClick={e => handleDelete(role._id)} className='btn btn-sm btn-danger'>delete</button>
+                  </td>
                  
                   
               </tr>

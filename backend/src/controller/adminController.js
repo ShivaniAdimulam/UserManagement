@@ -1,4 +1,4 @@
-const { login,getUserList,getAdminProfile,getSubadminList,createOrEditAppUser,deleteAppUser,getUserProfile,assignAccess,logout,createRole,addOrEditTeamMember,getUserDetails,editAppUser,getMemberDetails,deleteTeamMember,getRoleList } = require('../service/adminService');
+const { login,getUserList,getAdminProfile,getSubadminList,createOrEditAppUser,deleteAppUser,logout,createRole,addOrEditTeamMember,getUserDetails,getMemberDetails,deleteTeamMember,getRoleList,editRole,deleteRole,getRoleDetails } = require('../service/adminService');
 
 exports.login = async (req, res) => {
     try {
@@ -48,17 +48,7 @@ exports.getUserDetails = async (req, res) => {
     }
 }
 
-exports.editAppUser = async (req, res) => {
-    try {
-        const data = await editAppUser(req);
-        res.status(200).json(data);
-    } catch (error) {
-        return {
-            success: false,
-            message: error.message,
-        };
-    }
-}
+
 
 exports.getAdminProfile = async (req, res) => {
     try {
@@ -122,17 +112,7 @@ exports.addOrEditTeamMember = async (req, res) => {
     }
 }
 
-exports.assignAccess = async (req, res) => {
-    try {
-        const data = await assignAccess(req);
-        res.status(200).json(data);
-    } catch (error) {
-        return {
-            success: false,
-            message: error.message,
-        };
-    }
-}
+
 
 exports.createOrEditAppUser = async (req, res) => {
     try {
@@ -173,6 +153,42 @@ exports.deleteTeamMember = async (req, res) => {
 exports.getRoleList = async (req, res) => {
     try {
         const data = await getRoleList(req);
+        res.status(200).json(data);
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+}
+
+exports.editRole = async (req, res) => {
+    try {
+        const data = await editRole(req);
+        res.status(200).json(data);
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+}
+
+exports.deleteRole = async (req, res) => {
+    try {
+        const data = await deleteRole(req);
+        res.status(200).json(data);
+    } catch (error) {
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+}
+
+exports.getRoleDetails = async (req, res) => {
+    try {
+        const data = await getRoleDetails(req);
         res.status(200).json(data);
     } catch (error) {
         return {

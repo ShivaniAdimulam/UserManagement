@@ -14,11 +14,15 @@ function Editappuser(){
         userid:''
 	})
 	const navigate = useNavigate()
-	
+	const authToken = localStorage.getItem('authToken');
 	const {id} = useParams();
 
 	useEffect(()=> {
-		axios.get('http://localhost:4000/admin/getUserDetails/'+id)
+		axios.get('http://localhost:4000/admin/getUserDetails/'+id,{
+			headers: {
+			  Authorization: `Bearer ${authToken}`,
+			},
+		  })
 		.then(res => {
 			setData({...data, firstName: res.data.data.firstName,
                 lastName: res.data.data.lastName,
@@ -38,7 +42,11 @@ function Editappuser(){
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		axios.post('http://localhost:4000/admin/createOrEditAppUser', data)
+		axios.post('http://localhost:4000/admin/createOrEditAppUser', data,{
+			headers: {
+			  Authorization: `Bearer ${authToken}`,
+			},
+		  })
 		.then(res => {
 			if(res.data.success == true) {
 				navigate('/appusers')

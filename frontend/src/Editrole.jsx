@@ -1,16 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link,useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom';
 
-function Addrole() {
+function Editrole() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [roleName, setRoleName] = useState('');
-  const navigate = useNavigate()
   const [access, setAccess] = useState({
     addUser: false,
     editUser: false,
     deleteUser: false,
   });
   const authToken = localStorage.getItem('authToken');
+
+  useEffect(() => {
+    // Fetch role details when the component mounts
+    axios
+      .get(`http://localhost:4000/admin/getRoleDetails/${id}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
+      .then((response) => {
+        const roleDetails = response.data.data;
+        setRoleName(roleDetails.roleName);
+        setAccess({
+          addUser: roleDetails.addUser,
+          editUser: roleDetails.editUser,
+          deleteUser: roleDetails.deleteUser,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching role details:', error);
+      });
+  }, [id, authToken]);
+
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setAccess((prevAccess) => ({
@@ -25,31 +49,25 @@ function Addrole() {
     // Prepare the data to send to the backend
     const data = {
       roleName,
-      addUser:access.addUser,
-      editUser:access.editUser,
-      deleteUser:access.deleteUser
+      addUser: access.addUser,
+      editUser: access.editUser,
+      deleteUser: access.deleteUser,
+      roleId: id,
     };
 
     try {
-      // Make an API request to your backend
-      const response = await axios.post('http://localhost:4000/admin/createRole', data,{
+      // Make an API request to edit the role based on roleId
+      await axios.put('http://localhost:4000/admin/editRole', data, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-      }).then(res => {
-        navigate('/settings/rolemanagement')
-      }).catch(err => console.log(err));
+      });
 
       // Handle a successful response (you can customize this part)
-      //console.log('API Response:', response.data);
+      console.log('Role edited successfully');
 
-      // Clear the form fields after a successful submission
-      setRoleName('');
-      setAccess({
-        addUser: false,
-        editUser: false,
-        deleteUser: false,
-      });
+      // Redirect to a different page after editing the role (e.g., Role list page)
+      navigate('/settings/rolemanagement');
     } catch (error) {
       // Handle API request errors (e.g., network error or server error)
       console.error('API Error:', error);
@@ -60,7 +78,7 @@ function Addrole() {
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
-          <h1 className="mb-4">Create Role</h1>
+          <h1 className="mb-4">Edit Role</h1>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="roleName" className="form-label">
@@ -114,7 +132,7 @@ function Addrole() {
               </div>
             </div>
             <button type="submit" className="btn btn-primary">
-              Create Role
+              Update Role
             </button>
           </form>
         </div>
@@ -123,4 +141,4 @@ function Addrole() {
   );
 }
 
-export default Addrole;
+export default Editrole;

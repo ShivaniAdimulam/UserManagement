@@ -16,6 +16,11 @@ const roleSchema = Schema({
         type:Boolean
         
     },
+    isdeleted:{
+        type:Boolean,
+        default:false
+        
+    }
 }, { timestamps: true, versionKey: false });
 
 module.exports = model('role', roleSchema);

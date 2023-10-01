@@ -11,6 +11,7 @@ import Settings from './Settings'
 import Rolemanagement from './Rolemanagement' // Import RoleManagement component
 import Teammanagement from './Teammanagement' // Import TeamManagement component
 import Addrole from './Addrole'
+import Editrole from './Editrole'
 import Addteammember from './Addteammember'
 import Editteammember from './Editteammember'
 import Start from './Start'
@@ -36,6 +37,7 @@ function App() {
             <Route path='/settings/rolemanagement' element={<Rolemanagement />} />
             <Route path='/settings/teammanagement' element={<Teammanagement />} />
             <Route path='/addrole' element={<Addrole />}></Route> 
+            <Route path='/editrole/:id' element={<Editrole />}></Route>
             <Route path='/addteammember' element={<Addteammember />}></Route> 
             <Route path='/editteammember/:id' element={<Editteammember />}></Route>
       </Route>

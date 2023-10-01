@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
         
          let   adminExist = await adminModel.findOne({ email, isdeleted: false });
 
-            let chkBlock = await userModel.findOne({ email, isdeleted: false });
+            let chkBlock = await adminModel.findOne({ email, isdeleted: true });
 
             if (chkBlock) {
                 return {
@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
         }
         if (adminExist&& (bcrypt.compareSync(password, adminExist.password))) {
             // Create token
-            const token = jwt.sign({ user_id: adminExist._id, email }, "privateKey" )   //, { expiresIn: process.env.apiTokenExpiresTime, });
+            const token = jwt.sign({ user_id: adminExist._id, email }, process.env.PRIVATE_KEY,{expiresIn:process.env.JWT_EXPIRY})   //, { expiresIn: process.env.apiTokenExpiresTime, });
 
             adminExist.token = token;
             adminExist.loginStatus = true
@@ -150,26 +150,7 @@ exports.getUserDetails= async (req) => {
     }
 }
 
-exports.editAppUser= async (req) => {
-   
-    try {
-       
-        let data = await userModel.findOneAndUpdate({ _id:req.params.id},req.body,{new:true});
 
-        return {
-            success: true,
-            message: "User profile is updated!",
-            data: data
-        };
-    } catch (error) {
-       
-        console.log(error);
-        return {
-            success: false,
-            message: error.message,
-        };
-    }
-}
 
 
 exports.getSubadminList= async (req) => {
@@ -197,7 +178,15 @@ exports.getSubadminList= async (req) => {
 exports.createRole= async (req) => {
    
     try {
-
+        console.log("created",req.body)
+        let roleNameExist=await roleModel.findOne({roleName:req.body.roleName})
+        if(roleNameExist){
+            return {
+                success: false,
+                message: "Role Name is already exist,Please enter another role name.",
+                data: roleNameExist
+            }; 
+        }
        let data = await roleModel.create(req.body)
        
         return {
@@ -229,7 +218,19 @@ exports.addOrEditTeamMember= async (req) => {
         let findMember=await adminModel.findOne({_id:req.body.memberid})
         console.log("yes found",findMember)
         if(findMember!=null){
-            let update=await adminModel.findOneAndUpdate({_id:req.body.memberid},req.body,{new:true})
+            if(req.body.email){
+            var emailExist=await adminModel.findOne({$and:[{_id:{$ne:req.body.memberid}},{email:req.body.email}]})
+            }
+            
+            if(emailExist){
+                console.log(emailExist,"giirl")
+                return {
+                    success:false,
+                    message:"Entered email is already used by another member,please enter different email.",
+                    data:emailExist
+                }   
+            }
+           let update=await adminModel.findOneAndUpdate({_id:req.body.memberid},req.body,{new:true})
             return {
                 success:true,
                 message:"Member data edited successfully",
@@ -238,7 +239,14 @@ exports.addOrEditTeamMember= async (req) => {
         }
        }
       
-        console.log("hi")
+       let emailChk=await adminModel.findOne({email:req.body.email})
+       if(emailChk){
+        return {
+            success:false,
+            message:"Entered email is already used by another member,please enter different email.",
+            data:emailChk
+        }   
+    }
        let data = await adminModel.create(req.body)
         
         return {
@@ -277,46 +285,7 @@ exports.getMemberDetails= async (req) => {
     }
 }
 
-exports.assignAccess= async (req) => {
-   
-    try {
-       
-        
-        return {
-            success: true,
-            message: "Admin list is here!",
-            data: data
-        };
-    } catch (error) {
-       
-        console.log(error);
-        return {
-            success: false,
-            message: error.message,
-        };
-    }
-}
 
-exports.editAppUser = async (req) => {
-   
-    try {
-       
-        let updateData = await userModel.findOneAndUpdate({ _id: req.params.userid },req.body, { new: true });
-
-        return {
-            success: true,
-            message: "User updated successfully!",
-            data: updateData
-        };
-
-    } catch (error) {
-        console.log(error);
-        return {
-            success: false,
-            message: error.message,
-        };
-    }
-}
 
 
 exports.createOrEditAppUser = async (req) => {
@@ -328,6 +297,13 @@ exports.createOrEditAppUser = async (req) => {
             req.body.password=hash;
         }
         if(req.body.userid){
+            let userEmailExist=await userModel.findOne({$and:[{_id:{$ne:req.body.userid}},{email:req.body.email}]})
+            if(userEmailExist){
+                return{
+                    success:false,
+                    message:"Entered email is already used by another member,please enter different email."
+                }
+            }
             let updateData = await userModel.findOneAndUpdate({ _id: req.body.userid },req.body, { new: true });
              console.log(updateData,"data")
             return {
@@ -337,7 +313,13 @@ exports.createOrEditAppUser = async (req) => {
             };
         }else{
        
-        
+            let userEmailExist=await userModel.findOne({email:req.body.email})
+            if(userEmailExist){
+                return{
+                    success:false,
+                    message:"Entered email is already used by another member,please enter different email."
+                }
+            }
         let data = await userModel.create(req.body);
 
         return {
@@ -357,7 +339,14 @@ exports.createOrEditAppUser = async (req) => {
 
 exports.deleteAppUser = async(req)=>{
     try{
-            let data= await userModel.findOne({_id:req.body.id})
+         console.log(req.body.id,"come here")
+            let data= await userModel.findOne({_id:req.body.id,isdeleted:false})
+            if(data==null){
+                return{
+                    success:false,
+                    message:"It seems like user is already deleted."
+                }
+            }
             let deleteData = await userModel.findOneAndUpdate({_id:req.body.id},{isdeleted:true},{new:true});
             console.log(deleteData,req.body,data)
             return {
@@ -378,7 +367,13 @@ exports.deleteAppUser = async(req)=>{
 
 exports.deleteTeamMember = async(req)=>{
     try{
-            let data= await adminModel.findOne({_id:req.body.id})
+            let data= await adminModel.findOne({_id:req.body.id,isdeleted:false})
+            if(data==null){
+                return{
+                    success:false,
+                    message:"It seems like member is already deleted."
+                }
+            }
             let deleteData = await adminModel.findOneAndUpdate({_id:req.body.id},{isdeleted:true},{new:true});
             console.log(deleteData,req.body,data)
             return {
@@ -398,7 +393,7 @@ exports.deleteTeamMember = async(req)=>{
 
 exports.getRoleList = async(req)=>{
     try{
-            let data= await roleModel.find()
+            let data= await roleModel.find({isdeleted:false})
             
             return {
                 success: true,
@@ -414,6 +409,92 @@ exports.getRoleList = async(req)=>{
         };
     }
 }
+
+exports.editRole = async(req)=>{
+    try{
+             console.log(req.body,"print req")
+            // {$and:[{_id:{$ne:req.body.memberid}},{email:req.body.email}]}
+            let existName= await roleModel.findOne({$and:[{_id:{$ne:req.body.roleId}},{roleName:req.body.roleName},{isdeleted:false}]})
+
+            if(existName!=null){
+                return{
+                    success:false,
+                    message:"Role name is already exist,Please enter different role name"
+                }
+            }
+
+            let data= await roleModel.findOneAndUpdate({_id:req.body.roleId},req.body,{new:true})
+            
+            return {
+                success: true,
+                message: "Role data updated successfully!",
+                data: data
+            };
+       
+    }catch(error){
+        console.log(error);
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+}
+
+exports.deleteRole = async(req)=>{
+    try{
+            let existRole= await roleModel.findOne({_id:req.body.roleId,isdeleted:false})
+
+            if(existRole==null){
+                return{
+                    success:false,
+                    message:"It seems like role is already deleted"
+                }
+            }
+            
+            req.body.roleName="Not assigned"
+            let data= await roleModel.findOneAndUpdate({_id:req.body.roleId},req.body,{new:true})
+            
+            return {
+                success: true,
+                message: "Role data deleted successfully!",
+                data: data
+            };
+       
+    }catch(error){
+        console.log(error);
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+}
+
+exports.getRoleDetails = async(req)=>{
+    try{
+            let existRole= await roleModel.findOne({_id:req.params.id,isdeleted:false})
+
+            if(existRole==null){
+                return{
+                    success:false,
+                    message:"It seems like role is deleted"
+                }
+            }
+            
+            return {
+                success: true,
+                message: "Role data fetched successfully!",
+                data: existRole
+            };
+       
+    }catch(error){
+        console.log(error);
+        return {
+            success: false,
+            message: error.message,
+        };
+    }
+}
+
 
 
 

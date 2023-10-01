@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 function Addappuser(){
+	const [error, setError] = useState('')
     const [data, setData] = useState({
 		firstName: '',
 		lastName: '',
@@ -13,7 +14,7 @@ function Addappuser(){
 		address: '',
 	})
 	const navigate = useNavigate()
-
+	const authToken = localStorage.getItem('authToken');
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		// const formdata = new FormData();
@@ -34,15 +35,25 @@ function Addappuser(){
         password: data.password,
         address: data.address,
     };
-		axios.post('http://localhost:4000/admin/createOrEditAppUser', userData)
+		axios.post('http://localhost:4000/admin/createOrEditAppUser', userData,{
+			headers: {
+			  Authorization: `Bearer ${authToken}`,
+			},
+		  })
 		.then(res => {
+			if(res.data.success == true) {
 			navigate('/appusers')
+			}else{
+				console.log("here",res.data)
+                setError(res.data.message);
+			}
 		})
 		.catch(err => console.log(err));
 	}
 	return (
 		<div className='d-flex flex-column align-items-center pt-4'>
 			<h2>Add Appuser</h2>
+			{error && <div className="alert alert-danger">{error}</div>}
 			<form class="row g-3 w-50" onSubmit={handleSubmit}>
 			<div class="col-12">
 					<label for="inputName" class="form-label">First Name</label>

@@ -4,9 +4,13 @@ import { Link } from 'react-router-dom'
 
 function Appusers() {
   const [data, setData] = useState([])
-
+  const authToken = localStorage.getItem('authToken');
   useEffect(()=> {
-    axios.get('http://localhost:4000/admin/getUserList')
+    axios.get('http://localhost:4000/admin/getUserList',{
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
     .then(res => {
       if(res.data.success ==true) {
         setData(res.data.data);
@@ -22,7 +26,11 @@ function Appusers() {
         id: id,
         isdeleted: true,
       };
-    axios.put('http://localhost:4000/admin/deleteAppUser',requestBody)
+    axios.put('http://localhost:4000/admin/deleteAppUser',requestBody,{
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
     .then(res => {
       if(res.data.success ==true) {
         window.location.reload(true);

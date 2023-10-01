@@ -56,6 +56,7 @@ cd frontend
 npm run dev
 
 Open your web browser and access the application at http://127.0.0.1:5173/login.
+Enter the login credetntials to get loggedin : Email- adimulamshivani@gmail.com  and Password: shivani@100
 
 # Configuration
 You can configure various settings in the project by modifying the corresponding .env file.

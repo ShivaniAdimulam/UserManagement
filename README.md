@@ -1,6 +1,6 @@
-# UserManagement
-User Management System - Admin Panel
-Introduction
+# User Management System - Admin Panel
+
+# Introduction
 This is a simple user management system admin panel built using Node.js and React. It allows administrators to perform CRUD (Create, Read, Update, Delete) operations on application users and team members (sub-admins). It also provides role and rights management functionalities.
 
 Features
@@ -8,39 +8,38 @@ Create, Read, Update, and Delete users.
 Manage team members with different roles and access rights.
 Easy-to-use admin panel interface.
 Integration of Node.js for the backend and React for the frontend.
-Getting Started
+
+# Getting Started
 Follow these steps to get the project up and running:
 
-Prerequisites
+# Prerequisites
 Node.js installed on your machine
 npm package manager
 
-Installation
+# Installation
 Clone the repository to your local machine:
-
-
 git clone https://github.com/your-username/user-management-system.git
+
 Navigate to the project directory:
+cd usermanagementsystem
 
-
-cd user-management-system
 Install backend dependencies:
-
-
+cd backend
 npm install
+
 Install frontend dependencies:
-
-
 cd frontend
 npm install
-Usage
-Start the backend server:
 
+# Usage
+Start the backend server:
+cd backend
+npx nodemon server.js
 
 Start the frontend development server:
-
 cd frontend
 npm run dev
+
 Open your web browser and access the application at http://localhost:4000/login.
 
 Configuration

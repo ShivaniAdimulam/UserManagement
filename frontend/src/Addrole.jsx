@@ -4,6 +4,7 @@ import { Link,useNavigate } from 'react-router-dom'
 
 function Addrole() {
   const [roleName, setRoleName] = useState('');
+  const [error, setError] = useState('')
   const navigate = useNavigate()
   const [access, setAccess] = useState({
     addUser: false,
@@ -37,7 +38,11 @@ function Addrole() {
           Authorization: `Bearer ${authToken}`,
         },
       }).then(res => {
+        if(res.data.success==true){
         navigate('/settings/rolemanagement')
+        }else{
+          setError(res.data.message)
+        }
       }).catch(err => console.log(err));
 
       // Handle a successful response (you can customize this part)
@@ -61,6 +66,7 @@ function Addrole() {
       <div className="row justify-content-center">
         <div className="col-md-6">
           <h1 className="mb-4">Create Role</h1>
+          {error && <div className="alert alert-danger">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="roleName" className="form-label">

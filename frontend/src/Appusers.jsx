@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 function Appusers() {
   const [data, setData] = useState([])
+  const [error, setError] = useState('')
   const authToken = localStorage.getItem('authToken');
   useEffect(()=> {
     axios.get('http://localhost:4000/admin/getUserList',{
@@ -36,6 +37,7 @@ function Appusers() {
         window.location.reload(true);
       } else {
         alert("Error")
+        
       }
     })
     .catch(err => console.log(err));

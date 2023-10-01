@@ -14,7 +14,7 @@ router.post('/admin/createOrEditAppUser', auth, createOrEditAppUser);
 router.get('/admin/getUserDetails/:id', auth, getUserDetails);
 router.put('/admin/deleteAppUser', auth, deleteAppUser)
 router.post('/admin/createRole', auth, createRole)
-router.post('/admin/createOrEditTeamMember', auth, addOrEditTeamMember);
+router.post('/admin/createOrEditTeamMember',addOrEditTeamMember);
 router.get('/admin/getMemberDetails/:id', auth, getMemberDetails);
 router.put('/admin/deleteTeamMember', auth, deleteTeamMember);
 router.get('/admin/getRoleList', auth, getRoleList)

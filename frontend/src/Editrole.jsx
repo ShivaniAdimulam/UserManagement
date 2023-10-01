@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 function Editrole() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState('')
   const [roleName, setRoleName] = useState('');
   const [access, setAccess] = useState({
     addUser: false,
@@ -61,13 +62,20 @@ function Editrole() {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
-      });
+      }).then(res => {
+        if(res.data.success == true) {
+          navigate('/settings/rolemanagement');
+        }else{
+              setError(res.data.message)
+        }
+      })
+      .catch(err => console.log(err));
 
       // Handle a successful response (you can customize this part)
       console.log('Role edited successfully');
 
       // Redirect to a different page after editing the role (e.g., Role list page)
-      navigate('/settings/rolemanagement');
+      //navigate('/settings/rolemanagement');
     } catch (error) {
       // Handle API request errors (e.g., network error or server error)
       console.error('API Error:', error);
@@ -79,6 +87,7 @@ function Editrole() {
       <div className="row justify-content-center">
         <div className="col-md-6">
           <h1 className="mb-4">Edit Role</h1>
+          {error && <div className="alert alert-danger">{error}</div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="roleName" className="form-label">

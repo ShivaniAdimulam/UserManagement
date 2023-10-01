@@ -8,10 +8,10 @@ function Editteammember() {
     lastName: '',
     email: '',
     phoneNumber: '',
-    password: '',
     roleId: '',
     memberid: '',
   });
+  const [error, setError] = useState('')
   const [roleNames, setRoleNames] = useState([]); // State to store role names
   const navigate = useNavigate();
   const authToken = localStorage.getItem('authToken');
@@ -53,7 +53,6 @@ function Editteammember() {
           lastName: res.data.data.lastName,
           email: res.data.data.email,
           phoneNumber: res.data.data.phoneNumber,
-          password: res.data.data.password,
           roleId: res.data.data.roleId._id,
           memberid: res.data.data._id,
         });
@@ -62,8 +61,30 @@ function Editteammember() {
       .catch((err) => console.log(err));
   }, []);
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    const phoneRegex = /^\d{10}$/;
+    return phoneRegex.test(phoneNumber);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
+
+     // Validate email
+     if (!validateEmail(data.email)) {
+      setError('Invalid email address format.');
+      return;
+    }
+
+    // Validate phone number
+    if (!validatePhoneNumber(data.phoneNumber)) {
+      setError('Invalid phone number. Please enter a 10-digit phone number.');
+      return;
+    }
     axios.post('http://localhost:4000/admin/createOrEditTeamMember', data,{
 			headers: {
 			  Authorization: `Bearer ${authToken}`,
@@ -72,6 +93,8 @@ function Editteammember() {
       .then((res) => {
         if (res.data.success === true) {
           navigate('/settings/teammanagement');
+        }else{
+          setError(res.data.message)
         }
       })
       .catch((err) => console.log(err));
@@ -80,6 +103,7 @@ function Editteammember() {
   return (
     <div className="d-flex flex-column align-items-center pt-4">
       <h2>Edit TeamMember</h2>
+      {error && <div className="alert alert-danger">{error}</div>}
       <form className="row g-3 w-50" onSubmit={handleSubmit}>
         <div className="col-12">
           <label htmlFor="inputName" className="form-label">First Name</label>
@@ -129,17 +153,7 @@ function Editteammember() {
             value={data.phoneNumber}
           />
         </div>
-        <div className="col-12">
-          <label htmlFor="inputPassword4" className="form-label">Password</label>
-          <input
-            type="password"
-            className="form-control"
-            id="inputPassword4"
-            placeholder="Enter Password"
-            onChange={(e) => setData({ ...data, password: e.target.value })}
-            value={data.password}
-          />
-        </div>
+        
         <div className="col-12">
   <label htmlFor="inputRole" className="form-label">Role</label>
   <select

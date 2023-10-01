@@ -12,7 +12,7 @@ function Addteammember(){
 		password: '',
 		roleId: '',
 	})
-
+	const [error, setError] = useState('')
     const [roles, setRoles] = useState([]);
 	const navigate = useNavigate()
     useEffect(() => {
@@ -38,6 +38,24 @@ function Addteammember(){
             console.error('API Error:', error);
           });
       }, []);
+
+	  const validateEmail = (email) => {
+		// Regular expression for a valid email format
+		const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+		return emailRegex.test(email);
+	  };
+	
+	  const validatePhoneNumber = (phoneNumber) => {
+		// Regular expression for a 10-digit phone number
+		const phoneRegex = /^\d{10}$/;
+		return phoneRegex.test(phoneNumber);
+	  };
+	
+	  const validatePassword = (password) => {
+		// Regular expression for password validation
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+		return passwordRegex.test(password);
+	  };
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		// const formdata = new FormData();
@@ -48,7 +66,27 @@ function Addteammember(){
 		// formdata.append("password", data.password);
 		// formdata.append("address", data.address);
 		// console.log(formdata,"here--->")
-        event.preventDefault();
+       // event.preventDefault();
+
+	    // Validate email
+		if (!validateEmail(data.email)) {
+			setError('Invalid email address format.');
+			return;
+		  }
+	  
+		  // Validate phone number
+		  if (!validatePhoneNumber(data.phoneNumber)) {
+			setError('Invalid phone number. Please enter a 10-digit phone number.');
+			return;
+		  }
+	  
+		  // Validate password
+		  if (!validatePassword(data.password)) {
+			setError(
+			  'Password should be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+			);
+			return;
+		  }
 
     const userData = {
         firstName: data.firstName,
@@ -60,13 +98,18 @@ function Addteammember(){
     };
 		axios.post('http://localhost:4000/admin/createOrEditTeamMember', userData)
 		.then(res => {
+			if(res.data.success==true){
 			navigate('/settings/teammanagement')
+			}else{
+			setError(res.data.message)
+			}
 		})
 		.catch(err => console.log(err));
 	}
 	return (
 		<div className='d-flex flex-column align-items-center pt-4'>
 			<h2>Add TeamMember</h2>
+			{error && <div className="alert alert-danger">{error}</div>}
 			<form class="row g-3 w-50" onSubmit={handleSubmit}>
 			<div class="col-12">
 					<label for="inputName" class="form-label">First Name</label>

@@ -1,17 +1,50 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 function Home() {
-  const [adminCount, setAdminCount] = useState();
-  const [employeeCount, setEmployeeCount] = useState();
+  // const [adminCount, setAdminCount] = useState();
+  // const [userCount, setUserCount] = useState();
+  const authToken = localStorage.getItem('authToken');
+  // useEffect(() => {
+  //   // Simulate fetching admin and employee counts
+  //   const adminCount = 10; // Replace with actual admin count
+  //   const userCount = 100; // Replace with actual employee count
+
+  //   setAdminCount(adminCount);
+  //   setUserCount(userCount);
+  // }, []);
+
+  const [adminCount, setAdminCount] = useState(0)
+  const [userCount, setUserCount] = useState(0)
+ 
 
   useEffect(() => {
-    // Simulate fetching admin and employee counts
-    const adminCount = 10; // Replace with actual admin count
-    const employeeCount = 100; // Replace with actual employee count
+    axios.get('http://localhost:4000/admin/getUserList',{
+			headers: {
+			  Authorization: `Bearer ${authToken}`,
+			},
+		  })
+		.then(res => {
+      if(res.data.success==true){
+      let admincount=res.data.data.length
+			setAdminCount(admincount)
+      }
+		}).catch(err => console.log(err));
 
-    setAdminCount(adminCount);
-    setEmployeeCount(employeeCount);
-  }, []);
+    axios.get('http://localhost:4000/admin/getSubadminList',{
+			headers: {
+			  Authorization: `Bearer ${authToken}`,
+			},
+		  })
+		.then(res => {
+      if(res.data.success==true){
+      let usercount=res.data.data.length;
+			setUserCount(usercount)
+    }
+		}).catch(err => console.log(err));
+
+
+  } , [])
 
   return (
     <div>
@@ -31,7 +64,7 @@ function Home() {
           </div>
           <hr />
           <div className=''>
-            <h5>Total: {employeeCount}</h5>
+            <h5>Total: {userCount}</h5>
           </div>
         </div>
       </div>

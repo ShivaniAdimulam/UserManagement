@@ -17,6 +17,7 @@ Follow these steps to get the project up and running:
 
 # Prerequisites
 Node.js installed on your machine
+
 npm package manager
 
 # Installation

@@ -23,8 +23,6 @@ npm package manager
 Clone the repository to your local machine:
 git clone https://github.com/ShivaniAdimulam/UserManagement.git
 
-Navigate to the project directory:
-cd usermanagementsystem
 
 
 # To Install backend dependencies:

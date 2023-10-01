@@ -57,18 +57,7 @@ npm run dev
 Open your web browser and access the application at http://127.0.0.1:5173/login.
 
 # Configuration
-You can configure various settings in the project by modifying the corresponding configuration files in the config directory.
-
-# Contributing
-Contributions are welcome! If you'd like to contribute to this project, please follow these guidelines:
-
-# Fork the repository.
-Create a new branch for your feature or bug fix.
-Make your changes and commit them with descriptive commit messages.
-Push your changes to your forked repository.
-Create a pull request to merge your changes into the main project.
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
+You can configure various settings in the project by modifying the corresponding .env file.
 
 # Acknowledgments
 Thank you to the Node.js and React communities for providing the tools and resources necessary to build this project.

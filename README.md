@@ -26,11 +26,13 @@ git clone https://github.com/ShivaniAdimulam/UserManagement.git
 Navigate to the project directory:
 cd usermanagementsystem
 
+
 Install backend dependencies:
 
 cd backend
 
 npm install
+
 
 Install frontend dependencies:
 
@@ -44,6 +46,7 @@ Start the backend server:
 cd backend
 
 npx nodemon server.js
+
 
 Start the frontend development server:
 

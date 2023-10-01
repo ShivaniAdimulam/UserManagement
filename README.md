@@ -51,7 +51,7 @@ cd frontend
 
 npm run dev
 
-Open your web browser and access the application at http://localhost:4000/login.
+Open your web browser and access the application at http://127.0.0.1:5173/login.
 
 # Configuration
 You can configure various settings in the project by modifying the corresponding configuration files in the config directory.

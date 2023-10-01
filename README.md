@@ -27,28 +27,28 @@ Navigate to the project directory:
 cd usermanagementsystem
 
 
-#Install backend dependencies:
+# To Install backend dependencies:
 
 cd backend
 
 npm install
 
 
-#Install frontend dependencies:
+# To Install frontend dependencies:
 
 cd frontend
 
 npm install
 
 # Usage
-Start the backend server:
+# To Start the backend server:
 
 cd backend
 
 npx nodemon server.js
 
 
-Start the frontend development server:
+# To Start the frontend development server:
 
 cd frontend
 

@@ -38,9 +38,9 @@ const adminSchema = Schema({
         // default: "notAssigned"
     },
     
-    status:{
-        type: String,
-        default: "onHold"
+    verificationStatus:{
+        type: Boolean,
+        default: true
     },
     role:{
         type: String

@@ -41,7 +41,7 @@ function Editteammember() {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/admin/getMemberDetails/${id}`,{
+    axios.get(`http://localhost:4000/admin/getMemberDetails?id=${id}`,{
 			headers: {
 			  Authorization: `Bearer ${authToken}`,
 			},

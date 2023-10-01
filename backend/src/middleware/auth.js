@@ -11,7 +11,6 @@ module.exports = async (req, res, next) => {
       const { user_id } = jwt.verify(token, process.env.PRIVATE_KEY)
       req.user = await adminModel.findOneAndUpdate({ _id: user_id, isdeleted: false }, { token }, { new: true })
       if (req.user.verificationStatus !=false) {
-        console.log("Hmm")
         next()
       } else {
         return res.status(403).json({

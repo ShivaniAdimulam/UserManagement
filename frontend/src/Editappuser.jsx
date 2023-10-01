@@ -18,7 +18,7 @@ function Editappuser(){
 	const {id} = useParams();
 
 	useEffect(()=> {
-		axios.get('http://localhost:4000/admin/getUserDetails/'+id,{
+		axios.get(`http://localhost:4000/admin/getUserDetails?id=${id}`,{
 			headers: {
 			  Authorization: `Bearer ${authToken}`,
 			},
@@ -65,7 +65,7 @@ function Editappuser(){
 			setError('Invalid phone number. Please enter a 10-digit phone number.');
 			return;
 		  }
-		  
+
 		axios.post('http://localhost:4000/admin/createOrEditAppUser', data,{
 			headers: {
 			  Authorization: `Bearer ${authToken}`,

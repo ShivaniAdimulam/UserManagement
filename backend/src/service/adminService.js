@@ -132,8 +132,8 @@ exports.getAdminProfile= async (req) => {
 exports.getUserDetails= async (req) => {
    
     try {
-       console.log(req.params.id)
-        let data = await userModel.findOne({ _id:req.params.id});
+       //console.log(req.params.id)
+        let data = await userModel.findOne({ _id:req.query.id});
 
         return {
             success: true,
@@ -267,8 +267,8 @@ exports.addOrEditTeamMember= async (req) => {
 exports.getMemberDetails= async (req) => {
    
     try {
-       console.log(req.params.id)
-        let data = await adminModel.findOne({ _id:req.params.id}).populate("roleId");
+       //console.log(req.params.id)
+        let data = await adminModel.findOne({ _id:req.query.id}).populate("roleId");
 
         return {
             success: true,
@@ -471,7 +471,7 @@ exports.deleteRole = async(req)=>{
 
 exports.getRoleDetails = async(req)=>{
     try{
-            let existRole= await roleModel.findOne({_id:req.params.id,isdeleted:false})
+            let existRole= await roleModel.findOne({_id:req.query.id,isdeleted:false})
 
             if(existRole==null){
                 return{

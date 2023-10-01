@@ -17,7 +17,7 @@ function Editrole() {
   useEffect(() => {
     // Fetch role details when the component mounts
     axios
-      .get(`http://localhost:4000/admin/getRoleDetails/${id}`, {
+      .get(`http://localhost:4000/admin/getRoleDetails?id=${id}`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },

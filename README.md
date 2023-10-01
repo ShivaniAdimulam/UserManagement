@@ -27,14 +27,14 @@ Navigate to the project directory:
 cd usermanagementsystem
 
 
-Install backend dependencies:
+#Install backend dependencies:
 
 cd backend
 
 npm install
 
 
-Install frontend dependencies:
+#Install frontend dependencies:
 
 cd frontend
 

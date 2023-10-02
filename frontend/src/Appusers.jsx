@@ -36,7 +36,7 @@ function Appusers() {
       if(res.data.success ==true) {
         window.location.reload(true);
       } else {
-        alert("Error")
+        alert(res.data.message)
         
       }
     })

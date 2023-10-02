@@ -3,9 +3,9 @@ const adminModel = require('../model/adminModel');
 
 module.exports = async (req, res, next) => {
   try {
-    console.log(req.headers.authorization,"han")
+    //console.log(req.headers.authorization,"han")
     if (req.headers.authorization) {
-      console.log("yess")
+    
       const token = req.headers.authorization.split(" ").pop()
       
       const { user_id } = jwt.verify(token, process.env.PRIVATE_KEY)
